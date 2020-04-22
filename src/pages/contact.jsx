@@ -1,18 +1,20 @@
 import React from 'react'
-import { Link } from "gatsby"
+import Layout from "../components/Layout"
 
 const Contact = () => {
-  const text = 'meu texto'
+  const text = 'meu texto contato'
 
   return(
-    <>
-      <nav>
-      <Link to="/about" activeStyle={{ color: "red" }} activeClassName="active">About</Link> |
-      <Link to="/contact" activeStyle={{ color: "red" }} activeClassName="active">Contact</Link>
-      </nav>
-      <h1>Contact</h1>
-      <h2>{text}</h2>
-    </>
+    <Layout>
+      <div className="container">
+        <div className="row">
+          <div className="col-12 py-4">
+            <h1>Contact</h1>
+            <p>{text}</p>
+          </div>
+        </div>
+      </div>
+    </Layout>
   )
 }
 
