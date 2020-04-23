@@ -21,8 +21,9 @@ const About = () => {
         <div className="row">
           <div className="col-4">
             <CardV2
+            nameImage="foto01"
             titleCard="Card Title 01"
-            textCard="texttexttexttexttextvtexttexttexttexttexttext"
+            textCard="texttexttexttexttextvtexttexttexttsdsexttexttext"
             colorButton="gatsby"
             backgroundCard="#e3a617"
             styleDefault={true}
@@ -30,6 +31,7 @@ const About = () => {
           </div>
           <div className="col-4">
             <CardV2
+            nameImage="foto02"
             titleCard="Card Title 02"
             textCard="texttexttexttexttexttexttexttexttexttexttexttext"
             colorButton="warning"
@@ -39,6 +41,7 @@ const About = () => {
           </div>
           <div className="col-4">
             <CardV2
+            nameImage="foto03"
             titleCard="Card Title 03"
             textCard="texttexttexttexttexttexttexttexttexttexttexttext"
             colorButton="gatsby"
