@@ -24,6 +24,8 @@ const About = () => {
             titleCard="Card Title 01"
             textCard="texttexttexttexttextvtexttexttexttexttexttext"
             colorButton="gatsby"
+            backgroundCard="#e3a617"
+            styleDefault={true}
             />
           </div>
           <div className="col-4">
@@ -31,13 +33,17 @@ const About = () => {
             titleCard="Card Title 02"
             textCard="texttexttexttexttexttexttexttexttexttexttexttext"
             colorButton="warning"
+            backgroundCard=""
+            styleDefault={false}
             />
           </div>
           <div className="col-4">
             <CardV2
             titleCard="Card Title 03"
             textCard="texttexttexttexttexttexttexttexttexttexttexttext"
-            colorButton="danger"
+            colorButton="gatsby"
+            backgroundCard="#fff"
+            styleDefault={true}
             />
           </div>
         </div>
