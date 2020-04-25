@@ -9,13 +9,13 @@ _My personal static website, fully responsive made with GatsbyJs. The advantages
 
 ## 🚀 Building
 
-1.  **Create with [Gatsby](https://www.gatsbyjs.org/).**
+- **Create with [Gatsby](https://www.gatsbyjs.org/).**
   
-2.  **Responsive with [Bootstrap](https://getbootstrap.com/).**
+- **Responsive with [Bootstrap](https://getbootstrap.com/).**
 
-3.  **Styled with :nail_care: [styled-components](https://styled-components.com/).**
+- **Styled with :nail_care: [styled-components](https://styled-components.com/).**
 
-4.  **Queiries with [GraphQL](https://graphql.org/).**
+- **Queiries with [GraphQL](https://graphql.org/).**
 
 <!--## 🧐 What's inside?-->
 
@@ -25,12 +25,12 @@ _My personal static website, fully responsive made with GatsbyJs. The advantages
 
 ## :unlock: License
 
-This project is open source and available under the [MIT License](./LICENSE).
+##### This project is open source and available under the [MIT License](./LICENSE).
 
 ## :bust_in_silhouette: Author
 
-Rodrigo Medeiros
+##### Rodrigo Medeiros
 
 ## :coffee: Credits
 
-Images by :octocat: [Octodex](https://octodex.github.com/).
+##### Images by :octocat: [Octodex](https://octodex.github.com/).
