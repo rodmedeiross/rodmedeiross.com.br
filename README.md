@@ -27,6 +27,10 @@ _My personal static website, fully responsive made with GatsbyJs. The advantages
 
 This project is open source and available under the [MIT License](./LICENSE).
 
+## :bust_in_silhouette: Author
+
+Rodrigo Medeiros
+
 ## :coffee: Credits
 
 Images by :octocat: [Octodex](https://octodex.github.com/).
