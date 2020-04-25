@@ -25,7 +25,7 @@ _My personal static website, fully responsive made with GatsbyJs. The advantages
 
 ## :unlock: License
 
-This project is open source and available under the [MIT License](rodrigomedeiros.com/LICENSE).
+This project is open source and available under the [MIT License](./LICENSE).
 
 ## :coffee: Credits
 
