@@ -13,3 +13,29 @@ export const EmailWrapper = styled(Icons.Email)`
     `
   };
 `
+
+export const TelephoneWrapper = styled(Icons.Telephone)`
+  color: ${props => props.color ? props.color : 'red'};
+  width: ${props => props.width ? props.width : '100px'};
+
+  ${ props =>
+  props.danger &&
+    css`
+      color: orange;
+      width: 35px;    
+    `
+  };
+`
+
+export const LocationOnWrapper = styled(Icons.LocationOn)`
+  color: ${props => props.color ? props.color : 'red'};
+  width: ${props => props.width ? props.width : '100px'};
+
+  ${ props =>
+  props.danger &&
+    css`
+      color: orange;
+      width: 35px;    
+    `
+  };
+`

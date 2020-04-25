@@ -4,6 +4,7 @@ module.exports = {
     description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
     author: `@gatsbyjs`,
     copyright: `© Copyright - All Rights Reserved`,
+    siteUrl: `https://www.example.com`,
     socialMedia: {
       linkedin: 'https://www.linkedin.com/in/rodmedeiros',
       github: 'https://github.com/rodmedeiross',
@@ -13,6 +14,7 @@ module.exports = {
   plugins: [
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-sass`,
+    `gatsby-plugin-sitemap`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {

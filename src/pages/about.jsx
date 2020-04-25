@@ -1,13 +1,18 @@
 import React from 'react'
 import Layout from "../components/Layout"
-
 import CardV2 from '../components/CardV2'
+import SEO from "../components/seo"
 
 const About = () => {
   const text = 'meu texto'
 
   return(
     <Layout>
+      <SEO 
+        title="About"
+        lang="en"
+        description="About me!"
+      />
       <div className="container">
         <div className="row">
           <div className="col-12 py-4">
@@ -19,7 +24,7 @@ const About = () => {
 
       <div className="container">
         <div className="row">
-          <div className="col-4">
+          <div className="col-lg-4 mb-3">
             <CardV2
             nameImage="foto01"
             titleCard="Card Title 01"
@@ -29,7 +34,7 @@ const About = () => {
             styleDefault={true}
             />
           </div>
-          <div className="col-4">
+          <div className="col-lg-4 mb-3">
             <CardV2
             nameImage="foto02"
             titleCard="Card Title 02"
@@ -39,7 +44,7 @@ const About = () => {
             styleDefault={false}
             />
           </div>
-          <div className="col-4">
+          <div className="col-lg-4 mb-3">
             <CardV2
             nameImage="foto03"
             titleCard="Card Title 03"

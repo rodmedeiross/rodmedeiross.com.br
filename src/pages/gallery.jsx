@@ -1,5 +1,6 @@
 import React from 'react'
 import Layout from "../components/Layout"
+import SEO from "../components/seo"
 import { useStaticQuery, graphql } from 'gatsby'
 import Img from 'gatsby-image'
 
@@ -20,10 +21,15 @@ const Gallery = () => {
   `)
   return(
     <Layout>
-      <div className="container py-5">
+      <SEO 
+        title="Gallery" 
+        lang="en"
+        description="Pictures now!"
+      />
+      <div className="container py-4">
         <div className="row">
           <div className="col-12">
-            <h1 className="text-gatsby mb-4">Gallery</h1>
+            <h1 className="mb-4">Gallery</h1>
           </div>
         </div>
           <div className="row">
