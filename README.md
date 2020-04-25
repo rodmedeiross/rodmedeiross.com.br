@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://octodex.github.com/images/topguntocat.png" width="200" />
+    <img src="https://octodex.github.com/images/topguntocat.png" width="400" />
 </p>
 <h1 align="center">
   Wellcome my work, a Website in pure Gatsby!
