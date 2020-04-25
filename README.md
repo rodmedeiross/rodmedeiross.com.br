@@ -2,7 +2,7 @@
     <img src="https://octodex.github.com/images/topguntocat.png" width="400" />
 </p>
 <h1 align="center">
-  Wellcome my work, a Website in pure Gatsby!
+  Wellcome my work with <img src="./src/images/gatsby-icon.png" width="35" />!
 </h1>
 
 _My personal static website, fully responsive made with GatsbyJs. The advantages are facility in build, plugins for automate work and queries, yes, its amazing!_
