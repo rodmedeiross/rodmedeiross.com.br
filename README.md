@@ -7,6 +7,8 @@
 
 _My personal static website, fully responsive made with GatsbyJs. The advantages are facility in build, plugins for automate work and queries, yes, its amazing!_
 
+<a href="./LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/rodmedeiross/rodrigomedeiros.com?color=red"></img></a>
+
 ## 🚀 Building
 
 - **Create with [Gatsby](https://www.gatsbyjs.org/).**
