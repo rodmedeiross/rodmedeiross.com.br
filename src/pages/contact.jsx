@@ -39,7 +39,7 @@ const Contact = () => {
             <ul className="list-group">
               <li className="list-group-item">
                 <Styled.EmailWrapper danger
-                />example@gmail.com
+                />example@gmail.comm
               </li>
               <li className="list-group-item">
                 <Styled.TelephoneWrapper danger
