@@ -38,16 +38,16 @@ const Contact = () => {
           <div className="col-md-6">
             <ul className="list-group">
               <li className="list-group-item">
-                <Styled.EmailWrapper danger
-                />example@gmail.comm
+                <Styled.EmailWrapper 
+                /> example@gmail.comm
               </li>
               <li className="list-group-item">
-                <Styled.TelephoneWrapper danger
-                />+55 51 999999999
+                <Styled.TelephoneWrapper 
+                /> +55 51 999999999
               </li>
               <li className="list-group-item">
-                <Styled.LocationOnWrapper danger
-                />LaStreet 27, 547
+                <Styled.LocationOnWrapper
+                /> LaStreet 27, 547
               </li>
             </ul>
           </div>

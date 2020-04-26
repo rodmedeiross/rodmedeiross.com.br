@@ -29,7 +29,7 @@ const About = () => {
             nameImage="foto01"
             titleCard="Card Title 01"
             textCard="texttexttexttexttextvtexttexttexttsdsexttexttext"
-            colorButton="gatsby"
+            colorButton="gray-dark"
             backgroundCard=""
             styleDefault={true}
             />
@@ -39,9 +39,9 @@ const About = () => {
             nameImage="foto02"
             titleCard="Card Title 02"
             textCard="texttexttexttexttexttexttexttexttexttexttexttext"
-            colorButton="warning"
+            colorButton="gray-dark"
             backgroundCard=""
-            styleDefault={false}
+            styleDefault={true}
             />
           </div>
           <div className="col-lg-4 mb-3">
@@ -49,7 +49,7 @@ const About = () => {
             nameImage="foto03"
             titleCard="Card Title 03"
             textCard="texttexttexttexttexttexttexttexttexttexttexttext"
-            colorButton="gatsby"
+            colorButton="gray-dark"
             backgroundCard=""
             styleDefault={true}
             />
