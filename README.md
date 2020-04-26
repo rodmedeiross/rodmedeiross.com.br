@@ -33,4 +33,4 @@ _My personal static website, fully responsive made with GatsbyJs. The advantages
 
 ## :coffee: Credits
 
-##### Images by :octocat: [Octodex](https://octodex.github.com/).
+##### Images by :octocat: [Octodex](https://octodex.github.com/) and [Pixels](https://www.pexels.com/).
