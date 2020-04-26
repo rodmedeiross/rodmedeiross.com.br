@@ -30,7 +30,7 @@ const About = () => {
             titleCard="Card Title 01"
             textCard="texttexttexttexttextvtexttexttexttsdsexttexttext"
             colorButton="gatsby"
-            backgroundCard="#e3a617"
+            backgroundCard=""
             styleDefault={true}
             />
           </div>
@@ -50,7 +50,7 @@ const About = () => {
             titleCard="Card Title 03"
             textCard="texttexttexttexttexttexttexttexttexttexttexttext"
             colorButton="gatsby"
-            backgroundCard="#fff"
+            backgroundCard=""
             styleDefault={true}
             />
           </div>

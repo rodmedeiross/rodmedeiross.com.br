@@ -6,7 +6,7 @@ import Img from "gatsby-image"
 const Menu = () => {
   const { logo } = useStaticQuery(graphql`
     query {
-      logo: file(relativePath: { eq: "gatsby-icon.png" }) {
+      logo: file(relativePath: { eq: "fire.png" }) {
         childImageSharp {    
           fixed(width: 35, height: 35) {
             ...GatsbyImageSharpFixed

@@ -1,9 +1,9 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
+    title: `In development`,
     description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
-    copyright: `© Copyright - All Rights Reserved`,
+    author: `@rodmedeiross`,
+    copyright: `© 2020 Rodrigo Medeiros - All Rights Reserved`,
     siteUrl: `https://www.example.com`,
     socialMedia: {
       linkedin: 'https://www.linkedin.com/in/rodmedeiros',
@@ -34,7 +34,7 @@ module.exports = {
         background_color: `#663399`,
         theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/fire.png`, // This path is relative to the root of the site.
       },
     },
     `gatsby-plugin-offline`,
