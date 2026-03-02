@@ -1,6 +1,6 @@
 # Hugo configuration file
 baseURL: https://rodmedeiross.com.br/
-title: rodmedeiross
+title: rodmedeiross.com.br
 languageCode: en-us
 defaultContentLanguage: en
 
@@ -31,9 +31,6 @@ enableRobotsTXT: true
 # Menu - Navigation bar
 menu:
   main:
-    - name: Blog
-      pageRef: /blog
-      weight: 1
     - name: About
       pageRef: /about
       weight: 2
