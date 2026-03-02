@@ -38,8 +38,12 @@ menu:
       weight: 3
       params:
         type: search
-    - name: GitHub
+    - name: Theme
       weight: 4
+      params:
+        type: theme-toggle
+    - name: GitHub
+      weight: 5
       url: "https://github.com/rodmedeiross"
       params:
         icon: github
