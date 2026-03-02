@@ -1,0 +1,20 @@
+{{ $posts := where .Site.RegularPages "Section" "blog" }}
+{{ range $posts }}
+  <div class="hx:mb-8">
+    <h3 class="hx:text-lg hx:font-semibold hx:mt-0 hx:mb-1">
+      <a href="{{ .Permalink }}" class="hx:no-underline hx:text-primary-600 hx:dark:text-primary-400 hx:hover:underline">
+        {{ .Title }}
+      </a>
+    </h3>
+    <div class="hx:text-sm hx:text-gray-500 hx:dark:text-gray-400 hx:mb-2">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+      {{ with .Params.tags }}
+        · {{ range $i, $t := . }}{{ if $i }}, {{ end }}{{ $t }}{{ end }}
+      {{ end }}
+    </div>
+    {{ with .Summary }}
+      <p class="hx:text-sm hx:text-gray-600 hx:dark:text-gray-400 hx:mt-0">{{ . }}</p>
+    {{ end }}
+  </div>
+{{ end }}
+
