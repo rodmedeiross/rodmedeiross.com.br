@@ -1,7 +1,6 @@
 ---
 title: Blog
 toc: false
+cascade:
+  type: blog
 ---
-
-Notes, ideas, and things I learn along the way.
-
