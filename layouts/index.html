@@ -1,41 +1,43 @@
 {{ define "main" }}
-  <div class="hx-mt-6 hx-mb-12">
-    {{ with .Content }}
-      <div class="hx-mb-10 hx-prose dark:hx-prose-invert">{{ . }}</div>
-    {{ end }}
-
-    <div class="hx-flex hx-flex-col hx-gap-6">
-      {{ range (where .Site.RegularPages "Section" "blog") }}
-        <article class="hx-border hx-border-gray-200 dark:hx-border-gray-700 hx-rounded-xl hx-p-6 hover:hx-border-gray-400 dark:hover:hx-border-gray-500 hx-transition-colors">
-          <a href="{{ .Permalink }}" class="hx-no-underline">
-            <h2 class="hx-text-xl hx-font-semibold hx-text-gray-900 dark:hx-text-gray-100 hx-mb-1">
-              {{ .Title }}
-            </h2>
-          </a>
-
-          <div class="hx-flex hx-items-center hx-gap-3 hx-text-sm hx-text-gray-500 dark:hx-text-gray-400 hx-mb-3">
-            <time datetime="{{ .Date.Format "2006-01-02" }}">
-              {{ .Date.Format "January 2, 2006" }}
-            </time>
-            {{ with .Params.tags }}
-              <span>·</span>
-              <div class="hx-flex hx-gap-2">
-                {{ range . }}
-                  <span class="hx-bg-gray-100 dark:hx-bg-gray-800 hx-px-2 hx-py-0.5 hx-rounded">
-                    {{ . }}
-                  </span>
-                {{ end }}
-              </div>
-            {{ end }}
-          </div>
-
-          {{ with .Summary }}
-            <p class="hx-text-gray-600 dark:hx-text-gray-400 hx-text-sm hx-leading-relaxed">
-              {{ . }}
-            </p>
-          {{ end }}
-        </article>
+  <div class="hx:mx-auto hx:flex hx:max-w-[90rem]">
+    <div class="hx:w-full hx:break-words hx:min-w-0 hx:min-h-[calc(100vh-var(--nextra-navbar-height))] hx:px-6 hx:pt-4 hx:md:px-12">
+      {{ with .Content }}
+        <div class="hx:mb-8 hx:prose hx:dark:prose-invert hx:max-w-none">{{ . }}</div>
       {{ end }}
+
+      <div class="hx:flex hx:flex-col hx:gap-4">
+        {{ range (where .Site.RegularPages "Section" "blog") }}
+          <article class="hx:border hx:border-gray-200 hx:dark:border-neutral-800 hx:rounded-lg hx:p-5 hx:transition-colors hx:hover:border-gray-300 hx:dark:hover:border-neutral-700 hx:bg-transparent">
+            <a href="{{ .Permalink }}" class="hx:no-underline">
+              <h2 class="hx:text-lg hx:font-semibold hx:text-gray-900 hx:dark:text-gray-100">
+                {{ .Title }}
+              </h2>
+            </a>
+
+            <div class="hx:flex hx:items-center hx:gap-3 hx:mt-1 hx:text-sm hx:text-gray-500 hx:dark:text-gray-400">
+              <time datetime="{{ .Date.Format "2006-01-02" }}">
+                {{ .Date.Format "January 2, 2006" }}
+              </time>
+              {{ with .Params.tags }}
+                <span>·</span>
+                <div class="hx:flex hx:gap-1.5">
+                  {{ range . }}
+                    <span class="hx:bg-gray-100 hx:dark:bg-neutral-800 hx:px-2 hx:py-0.5 hx:rounded hx:text-xs">
+                      {{ . }}
+                    </span>
+                  {{ end }}
+                </div>
+              {{ end }}
+            </div>
+
+            {{ with .Summary }}
+              <p class="hx:mt-2 hx:text-gray-600 hx:dark:text-gray-400 hx:text-sm hx:leading-relaxed">
+                {{ . }}
+              </p>
+            {{ end }}
+          </article>
+        {{ end }}
+      </div>
     </div>
   </div>
 {{ end }}
