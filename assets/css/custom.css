@@ -1,0 +1,76 @@
+/* Excalifont — used by Mermaid diagrams. SIL OFL 1.1. See /fonts/Excalifont-LICENSE.txt */
+@font-face {
+  font-family: "Excalifont";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/Excalifont-Regular.woff2") format("woff2");
+  unicode-range: U+0020-007E, U+00A0-00FF, U+0152-0153, U+0178, U+2013-2014, U+2018-201A, U+201C-201E, U+2022, U+2026;
+}
+
+/* ---- Mermaid: per-diagram zoom button + fullscreen overlay ---- */
+.mermaid {
+  position: relative;
+}
+.mermaid-zoom-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 0.375rem;
+  background: rgba(255, 255, 255, 0.85);
+  color: #333;
+  cursor: zoom-in;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.mermaid:hover .mermaid-zoom-btn,
+.mermaid-zoom-btn:focus-visible {
+  opacity: 1;
+}
+.dark .mermaid-zoom-btn {
+  background: rgba(40, 40, 40, 0.85);
+  color: #eee;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.mermaid-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  overflow: auto;
+  cursor: zoom-out;
+}
+.mermaid-overlay.open {
+  display: flex;
+}
+.mermaid-overlay-inner {
+  margin: auto;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  background: #fff;
+  cursor: default;
+}
+.dark .mermaid-overlay-inner {
+  background: #1b1b1b;
+}
+.mermaid-overlay-inner svg {
+  display: block;
+  height: auto;
+  max-width: none;
+  width: auto;
+  min-width: min(90vw, 1200px);
+}

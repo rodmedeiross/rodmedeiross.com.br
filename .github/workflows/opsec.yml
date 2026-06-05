@@ -1,0 +1,20 @@
+# OPSEC content guard — fails if published content leaks internal infra detail.
+name: OPSEC content guard
+
+on:
+  pull_request:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  opsec:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Scan content for leaked infra details
+        run: bash scripts/opsec-scan.sh content

@@ -1,0 +1,165 @@
+{{- /* Mermaid — shadowed from Hextra to add look: 'handDrawn' (Excalidraw-style). */ -}}
+
+{{- $mermaidBase := "" -}}
+{{- $useDefaultCdn := true -}}
+{{- with site.Params.mermaid.base -}}
+  {{- $mermaidBase = . -}}
+  {{- $useDefaultCdn = false -}}
+{{- end -}}
+
+{{- $mermaidJsAsset := "" -}}
+{{- with site.Params.mermaid.js -}}
+  {{- $mermaidJsAsset = . -}}
+{{- end -}}
+
+{{- /* If only js is set without base, use local asset loading */ -}}
+{{- if and $useDefaultCdn (ne $mermaidJsAsset "") -}}
+  {{- $useDefaultCdn = false -}}
+{{- end -}}
+
+{{- /* Set default CDN base if needed */ -}}
+{{- if $useDefaultCdn -}}
+  {{- $mermaidBase = "https://cdn.jsdelivr.net/npm/mermaid@latest/dist" -}}
+{{- end -}}
+
+{{- $isRemoteBase := or (strings.HasPrefix $mermaidBase "http://") (strings.HasPrefix $mermaidBase "https://") -}}
+{{- $minSuffix := cond hugo.IsProduction ".min" "" -}}
+
+{{- /* JS retrieval: get raw JS from either local asset or remote, then process */ -}}
+{{- if $isRemoteBase -}}
+  {{- $jsPath := cond (ne $mermaidJsAsset "") $mermaidJsAsset (printf "mermaid%s.js" $minSuffix) -}}
+  {{- $mermaidJsUrl := printf "%s/%s" $mermaidBase $jsPath -}}
+  {{- with try (resources.GetRemote $mermaidJsUrl) -}}
+    {{- with .Err -}}
+      {{- errorf "Could not retrieve Mermaid js file from %s. Reason: %s." $mermaidJsUrl . -}}
+    {{- else with .Value -}}
+      {{- with resources.Copy (printf "js/mermaid%s.js" $minSuffix) . -}}
+        {{- $mermaidJs := . | fingerprint -}}
+        <script defer src="{{ $mermaidJs.RelPermalink }}" integrity="{{ $mermaidJs.Data.Integrity }}" crossorigin="anonymous"></script>
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- else if $mermaidJsAsset -}}
+  {{- with resources.Get $mermaidJsAsset -}}
+    {{- $mermaidJs := . | fingerprint -}}
+    <script defer src="{{ $mermaidJs.RelPermalink }}" integrity="{{ $mermaidJs.Data.Integrity }}" crossorigin="anonymous"></script>
+  {{- else -}}
+    {{- errorf "Mermaid js asset not found at %q" $mermaidJsAsset -}}
+  {{- end -}}
+{{- end -}}
+
+<script>
+  (function () {
+    const FONT_FAMILY = '"Excalifont", cursive';
+
+    const themeName = () =>
+      document.documentElement.classList.contains("dark") ? "dark" : "neutral";
+
+    // Render (or re-render) every diagram with a consistent config, then add zoom buttons.
+    function renderAll() {
+      if (typeof mermaid === "undefined") return;
+      document.querySelectorAll(".mermaid").forEach((el) => {
+        el.innerHTML = el.dataset.original;
+        el.removeAttribute("data-processed");
+      });
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: themeName(),
+        look: "handDrawn",
+        fontFamily: FONT_FAMILY,
+      });
+      let done;
+      try {
+        const p = mermaid.run ? mermaid.run({ querySelector: ".mermaid" }) : null;
+        done = p && p.then ? p : Promise.resolve();
+        if (!mermaid.run) mermaid.init(undefined, document.querySelectorAll(".mermaid"));
+      } catch (e) {
+        done = Promise.resolve();
+      }
+      done.then(addZoomButtons).catch(addZoomButtons);
+    }
+
+    // --- Zoom: a button on each diagram opens it large in a fullscreen overlay. ---
+    let overlay;
+    function ensureOverlay() {
+      if (overlay) return overlay;
+      overlay = document.createElement("div");
+      overlay.className = "mermaid-overlay";
+      overlay.innerHTML = '<div class="mermaid-overlay-inner"></div>';
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) closeOverlay();
+      });
+      document.body.appendChild(overlay);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeOverlay();
+      });
+      return overlay;
+    }
+    function openOverlay(svg) {
+      const o = ensureOverlay();
+      const inner = o.querySelector(".mermaid-overlay-inner");
+      inner.innerHTML = "";
+      const clone = svg.cloneNode(true);
+      clone.removeAttribute("style");
+      inner.appendChild(clone);
+      o.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeOverlay() {
+      if (!overlay) return;
+      overlay.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+    function addZoomButtons() {
+      document.querySelectorAll(".mermaid").forEach((el) => {
+        const svg = el.querySelector("svg");
+        if (!svg || el.querySelector(".mermaid-zoom-btn")) return;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "mermaid-zoom-btn";
+        btn.title = "Expand";
+        btn.setAttribute("aria-label", "Expand diagram");
+        btn.innerHTML = "⤢";
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          openOverlay(el.querySelector("svg"));
+        });
+        el.appendChild(btn);
+      });
+    }
+
+    function boot() {
+      document.querySelectorAll(".mermaid").forEach((el) => {
+        if (el.dataset.original === undefined) el.dataset.original = el.innerHTML;
+      });
+
+      // Render once the Excalifont is actually available, so handDrawn metrics are
+      // computed with the right font (avoids the inconsistent fallback-font render).
+      const start = () => renderAll();
+      if (document.fonts && document.fonts.load) {
+        Promise.race([
+          document.fonts.load('1em "Excalifont"').then(() => document.fonts.ready),
+          new Promise((r) => setTimeout(r, 1500)),
+        ]).then(start, start);
+      } else {
+        start();
+      }
+
+      // Re-render on theme toggle (keeping fontFamily, which the old code dropped).
+      let t;
+      new MutationObserver(() => {
+        clearTimeout(t);
+        t = setTimeout(renderAll, 150);
+      }).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", boot);
+    } else {
+      boot();
+    }
+  })();
+</script>

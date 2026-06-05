@@ -1,0 +1,311 @@
+{{- /* Easter egg: self-playing pixel T-Rex runner. Vanilla canvas, theme-aware.
+       Obstacles (cactus + server tower), high-flying pterodactyl, language
+       collectibles, and a rare lightning "alert" easter egg. */ -}}
+{{- $hint := "piloto automático · espaço ou toque pra assumir o controle" -}}
+{{- if ne .Page.Language.Lang "pt" -}}
+  {{- $hint = "autopilot · press space or tap to take control" -}}
+{{- end -}}
+
+<figure class="dino-egg" aria-hidden="true">
+  <canvas id="dino-egg-canvas"></canvas>
+  <figcaption>{{ $hint }}</figcaption>
+</figure>
+
+<style>
+  .dino-egg { margin: 2.5rem 0 0; }
+  .dino-egg canvas {
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    height: 150px;
+    color: inherit;            /* drives the diagram color, adapts to dark/light */
+    image-rendering: pixelated;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .dino-egg figcaption {
+    margin-top: 0.45rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.72rem;
+    opacity: 0.55;
+  }
+</style>
+
+<script>
+  (function () {
+    var cv = document.getElementById("dino-egg-canvas");
+    if (!cv || cv.dataset.init) return;
+    cv.dataset.init = "1";
+    var ctx = cv.getContext("2d");
+
+    var W, H, S, groundY, dinoX, GRAV, JUMP, baseSpeed, COL;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var LANGS = [
+      { label: "rs", name: "Rust", color: "#c56a3a" },
+      { label: "λ",  name: "functional", color: "#7c6ae0" },
+      { label: "py", name: "Python", color: "#3776ab" },
+      { label: "go", name: "Go", color: "#00add8" },
+      { label: "jl", name: "Julia", color: "#9558b2" },
+      { label: "ts", name: "TypeScript", color: "#3178c6" }
+    ];
+
+    function readColor() { COL = getComputedStyle(cv).color || "#444"; }
+
+    function resize() {
+      var dpr = Math.max(1, window.devicePixelRatio || 1);
+      W = cv.clientWidth || 600;
+      H = cv.clientHeight || 150;
+      cv.width = Math.round(W * dpr);
+      cv.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      S = Math.max(2, Math.round(H / 46));
+      groundY = H - 4;
+      dinoX = Math.max(16, Math.round(W * 0.08));
+      var k = S / 3;
+      GRAV = 0.5 * k;
+      JUMP = 9 * k;
+      baseSpeed = 3.2 * k;
+    }
+
+    // --- game state ---
+    var dinoY, vy, onGround, frame, frameT, fc, mode, dead, deadT, speed, score;
+    var obs, colls, pops, nextGap, collTimer, lightTimer, flash, alertT, groundOff;
+    function reset() {
+      dinoY = 0; vy = 0; onGround = true; frame = 0; frameT = 0; fc = 0;
+      mode = "auto"; dead = false; deadT = 0; speed = baseSpeed; score = 0;
+      obs = []; colls = []; pops = [];
+      nextGap = W * 0.6; collTimer = W * 1.2; lightTimer = 700 + Math.random() * 500;
+      flash = 0; alertT = 0; groundOff = 0;
+    }
+
+    function dinoTop() { return groundY - 21 * S - dinoY; }
+    function px(x, gx, gy, gw, gh) { ctx.fillRect(x + gx * S, dinoTop() + gy * S, gw * S, gh * S); }
+
+    function drawDino() {
+      ctx.fillStyle = COL;
+      var x = dinoX;
+      px(x, 11, 0, 8, 7);  px(x, 12, 6, 4, 1);  px(x, 7, 7, 9, 6);
+      px(x, 14, 10, 2, 2); px(x, 5, 12, 9, 3);
+      px(x, 0, 6, 2, 1);   px(x, 1, 7, 3, 1);   px(x, 3, 8, 4, 1);
+      if (!onGround) {
+        px(x, 6, 15, 2, 4); px(x, 6, 19, 3, 1); px(x, 11, 15, 2, 4); px(x, 11, 19, 3, 1);
+      } else if (frame === 0) {
+        px(x, 6, 15, 2, 6); px(x, 6, 20, 3, 1); px(x, 11, 15, 2, 4); px(x, 11, 19, 3, 1);
+      } else {
+        px(x, 6, 15, 2, 4); px(x, 6, 19, 3, 1); px(x, 11, 15, 2, 6); px(x, 11, 20, 3, 1);
+      }
+      ctx.clearRect(x + 16 * S, dinoTop() + 2 * S, S, S);
+      ctx.clearRect(x + 14 * S, dinoTop() + 5 * S, 4 * S, S);
+    }
+
+    function drawCactus(o) {
+      ctx.fillStyle = COL;
+      var top = groundY - o.h * S;
+      ctx.fillRect(o.x + 2 * S, top, 2 * S, o.h * S);
+      ctx.fillRect(o.x, top + (o.h - 6) * S, 2 * S, S);
+      ctx.fillRect(o.x, top + (o.h - 8) * S, S, 3 * S);
+      ctx.fillRect(o.x + 4 * S, top + (o.h - 4) * S, 2 * S, S);
+      ctx.fillRect(o.x + 5 * S, top + (o.h - 6) * S, S, 3 * S);
+    }
+
+    function drawTower(o) {
+      ctx.fillStyle = COL;
+      var w = 6 * S, top = groundY - o.h * S;
+      ctx.fillRect(o.x, top, w, o.h * S);
+      for (var yy = top + 3 * S; yy < groundY - 2 * S; yy += 3 * S) {
+        ctx.clearRect(o.x + S, yy, w - 2 * S, Math.max(1, S / 2));   // rack-unit gaps
+      }
+      if ((fc >> 3) & 1) {                                           // blinking LED
+        ctx.fillStyle = "#5fd35f";
+        ctx.fillRect(o.x + w - 2 * S, top + S, S, S);
+        ctx.fillStyle = COL;
+      }
+    }
+
+    function drawPtero(o) {
+      ctx.fillStyle = COL;
+      var bx = o.x, by = groundY - 29 * S;
+      ctx.fillRect(bx + 2 * S, by + 2 * S, 6 * S, 2 * S);     // body
+      ctx.fillRect(bx + 8 * S, by + 2 * S, 3 * S, S);         // head/beak
+      if ((fc >> 3) & 1) ctx.fillRect(bx + 3 * S, by, 4 * S, 2 * S);          // wing up
+      else ctx.fillRect(bx + 3 * S, by + 4 * S, 4 * S, 2 * S);                // wing down
+    }
+
+    function drawObstacle(o) {
+      if (o.type === "cactus") drawCactus(o);
+      else if (o.type === "tower") drawTower(o);
+      else drawPtero(o);
+    }
+
+    function obstacleBox(o) {
+      if (o.type === "ptero") return { x: o.x + 2 * S, y: groundY - 29 * S, w: 9 * S, h: 6 * S };
+      if (o.type === "tower") return { x: o.x + S, y: groundY - o.h * S, w: 4 * S, h: o.h * S };
+      return { x: o.x + 1 * S, y: groundY - o.h * S, w: 4 * S, h: o.h * S };
+    }
+
+    function drawGround() {
+      ctx.fillStyle = COL;
+      ctx.fillRect(0, groundY, W, Math.max(1, S / 2));
+      for (var gx = -((groundOff | 0) % 28); gx < W; gx += 28) {
+        ctx.fillRect(gx, groundY + 3 * (S / 3), 3 * (S / 3), Math.max(1, S / 3));
+      }
+    }
+
+    function jump() { if (onGround && !dead) { vy = -JUMP; onGround = false; } }
+    function dinoBox() { var t = dinoTop(); return { x: dinoX + 3 * S, y: t + 2 * S, w: 13 * S, h: 17 * S }; }
+    function hit(a, b) { return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y; }
+
+    function spawnObstacle() {
+      if (score >= 12 && Math.random() < 0.3) {
+        obs.push({ type: "ptero", x: W + 4 * S });
+        nextGap = speed * 75 + Math.random() * W * 0.3;     // pteros get extra room
+      } else if (Math.random() < 0.5) {
+        obs.push({ type: "tower", x: W + 4 * S, h: 8 + Math.floor(Math.random() * 3) });
+        nextGap = speed * 55 + Math.random() * W * 0.4;
+      } else {
+        obs.push({ type: "cactus", x: W + 4 * S, h: 8 + Math.floor(Math.random() * 4) });
+        nextGap = speed * 55 + Math.random() * W * 0.4;
+      }
+    }
+
+    function step(dt) {
+      fc += dt; groundOff += speed * dt;
+      if (!onGround) {
+        dinoY -= vy * dt; vy += GRAV * dt;
+        if (dinoY <= 0) { dinoY = 0; vy = 0; onGround = true; }
+      }
+      frameT += dt;
+      if (frameT > 6) { frameT = 0; frame ^= 1; }
+
+      // lightning easter egg
+      if (flash > 0) flash -= dt;
+      if (alertT > 0) alertT -= dt;
+      lightTimer -= dt;
+      if (lightTimer <= 0 && !dead) { flash = 5; alertT = 80; lightTimer = 900 + Math.random() * 900; }
+
+      if (dead) { deadT += dt; if (deadT > 70) reset(); return; }
+
+      // obstacles
+      for (var i = 0; i < obs.length; i++) obs[i].x -= speed * dt;
+      while (obs.length && obs[0].x < -10 * S) { obs.shift(); score++; }
+      nextGap -= speed * dt;
+      if (nextGap <= 0) spawnObstacle();
+
+      // collectibles (language logos), float at jump height
+      collTimer -= speed * dt;
+      if (collTimer <= 0) {
+        var L = LANGS[Math.floor(Math.random() * LANGS.length)];
+        colls.push({ x: W + 4 * S, y: groundY - (26 + Math.random() * 4) * S, lang: L });
+        collTimer = speed * 140 + Math.random() * W * 1.2;
+      }
+      for (var c = colls.length - 1; c >= 0; c--) {
+        colls[c].x -= speed * dt;
+        if (colls[c].x < -6 * S) { colls.splice(c, 1); continue; }
+        var cb = { x: colls[c].x, y: colls[c].y, w: 5 * S, h: 5 * S };
+        if (hit(dinoBox(), cb)) {
+          score += 5;
+          pops.push({ text: colls[c].lang.name, x: colls[c].x, y: colls[c].y, life: 50 });
+          colls.splice(c, 1);
+        }
+      }
+      for (var p = pops.length - 1; p >= 0; p--) {
+        pops[p].y -= 0.4 * dt * S / 3; pops[p].life -= dt;
+        if (pops[p].life <= 0) pops.splice(p, 1);
+      }
+
+      // autopilot: only jumps ground obstacles (pteros fly over a grounded dino)
+      if (mode === "auto" && onGround) {
+        var fr = dinoX + 16 * S;
+        for (var j = 0; j < obs.length; j++) {
+          if (obs[j].type === "ptero") continue;
+          var gap = obs[j].x - fr;
+          if (gap > 0 && gap < speed * 8 + 2 * S) { jump(); break; }
+        }
+      }
+
+      // collisions
+      var db = dinoBox();
+      for (var k2 = 0; k2 < obs.length; k2++) {
+        if (hit(db, obstacleBox(obs[k2]))) { dead = true; deadT = 0; break; }
+      }
+      speed = Math.min(baseSpeed * 1.8, speed + 0.0005 * dt);
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, W, H);
+      drawGround();
+      for (var i = 0; i < obs.length; i++) drawObstacle(obs[i]);
+      // collectibles
+      for (var c = 0; c < colls.length; c++) {
+        var o = colls[c];
+        ctx.fillStyle = o.lang.color;
+        ctx.fillRect(o.x, o.y, 5 * S, 5 * S);
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold " + (3 * S).toFixed(0) + "px ui-monospace, monospace";
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        ctx.fillText(o.lang.label, o.x + 2.5 * S, o.y + 2.7 * S);
+        ctx.textBaseline = "alphabetic";
+      }
+      drawDino();
+      // popups (collected language names)
+      ctx.fillStyle = COL; ctx.textAlign = "center";
+      ctx.font = (3 * S).toFixed(0) + "px ui-monospace, monospace";
+      for (var pp = 0; pp < pops.length; pp++) {
+        ctx.globalAlpha = Math.max(0, Math.min(1, pops[pp].life / 40));
+        ctx.fillText(pops[pp].text, pops[pp].x + 2 * S, pops[pp].y);
+      }
+      ctx.globalAlpha = 1;
+      // score
+      ctx.fillStyle = COL; ctx.globalAlpha = 0.5;
+      ctx.font = (10 * (S / 3)).toFixed(0) + "px ui-monospace, monospace";
+      ctx.textAlign = "right";
+      ctx.fillText(String(score).padStart(4, "0"), W - 4, 14 * (S / 3));
+      if (dead) { ctx.textAlign = "center"; ctx.fillText("· game over ·", W / 2, H / 2); }
+      ctx.globalAlpha = 1; ctx.textAlign = "left";
+      // MGS-style alert (lightning easter egg)
+      if (alertT > 0) {
+        var ax = dinoX + 8 * S, ay = dinoTop() - 6 * S;
+        ctx.globalAlpha = Math.min(1, alertT / 30);
+        ctx.fillStyle = COL;
+        ctx.fillRect(ax, ay, 5 * S, 6 * S);
+        ctx.clearRect(ax + 2 * S, ay + 1 * S, S, 3 * S);   // "!" stem
+        ctx.clearRect(ax + 2 * S, ay + 5 * S, S, 1 * S);   // "!" dot
+        ctx.globalAlpha = 1;
+      }
+      // lightning flash on top
+      if (flash > 0) {
+        ctx.fillStyle = COL;
+        ctx.globalAlpha = Math.min(0.85, flash / 5);
+        ctx.fillRect(0, 0, W, H);
+        ctx.globalAlpha = 1;
+      }
+    }
+
+    var last = 0, running = true, visible = true;
+    function loop(ts) {
+      if (!last) last = ts;
+      var dt = Math.min(2.5, (ts - last) / 16.67);
+      last = ts;
+      if (running && visible) { step(dt); render(); } else { last = 0; }
+      requestAnimationFrame(loop);
+    }
+
+    function init() { resize(); readColor(); reset(); render(); if (reduce) return; requestAnimationFrame(loop); }
+
+    function take() { mode = "play"; jump(); }
+    cv.addEventListener("click", take);
+    cv.addEventListener("touchstart", function (e) { e.preventDefault(); take(); }, { passive: false });
+    document.addEventListener("keydown", function (e) {
+      if ((e.code === "Space" || e.code === "ArrowUp") && isInView()) { e.preventDefault(); mode = "play"; jump(); }
+    });
+    function isInView() { var r = cv.getBoundingClientRect(); return r.top < innerHeight && r.bottom > 0; }
+
+    window.addEventListener("resize", function () { resize(); render(); });
+    document.addEventListener("visibilitychange", function () { visible = !document.hidden; });
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(cv);
+    new MutationObserver(readColor).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    init();
+  })();
+</script>
