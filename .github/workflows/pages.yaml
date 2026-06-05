@@ -31,6 +31,9 @@ jobs:
           fetch-depth: 0
           submodules: recursive
 
+      - name: OPSEC content guard
+        run: bash scripts/opsec-scan.sh content
+
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
