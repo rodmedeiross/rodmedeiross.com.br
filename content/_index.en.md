@@ -1,5 +1,5 @@
 ---
-title: "Welcome to my public notebook"
+title: "Welcome to my public documentation"
 toc: false
 ---
 

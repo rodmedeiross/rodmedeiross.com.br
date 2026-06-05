@@ -14,3 +14,10 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Obsidian vault config (content/ is opened as a vault for authoring)
+.obsidian/
+content/.obsidian/
+
+# Local-only project notes (not published)
+CLAUDE.md
