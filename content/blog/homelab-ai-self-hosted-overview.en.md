@@ -27,7 +27,7 @@ And the fourth, honest one: building things is fun.
 
 ## Where it lives — `mobydick`, a beefy cluster just for Docker
 
-Inference needs a GPU. I have a consumer-grade NVIDIA GPU — not the best card in the world, but it runs models well enough to handle my workloads. It's passed via **PCIe passthrough (VFIO)** from Proxmox straight to a dedicated VM: `mobydick`. That VM is just a Docker host, no UI, no media server sharing the GPU. Only the AI stack. The flow of getting VFIO right for this gets its own post in this series (still a work in progress, it's a whole article on its own).
+Inference needs a GPU. I have a consumer-grade NVIDIA GPU — not the best card in the world, but it runs models well enough to handle my workloads. It's passed via **PCIe passthrough (VFIO)** from Proxmox straight to a dedicated VM: `mobydick`. That VM is just a Docker host, no UI, no media server sharing the GPU. Only the AI stack. The flow of getting VFIO right for this gets its [own post in this series]({{< ref "vfio-gpu-passthrough-proxmox" >}}) — it's a whole article on its own.
 
 Choosing to isolate AI on an exclusive VM was intentional:
 
@@ -113,7 +113,7 @@ It's the piece that makes the stack **extensible**.
 
 This was the **map**. The next posts dive into concrete pieces of it:
 
-- **GPU passthrough via VFIO** — what's under the `passthrough` mentioned here: IOMMU groups, vfio-pci, VM-to-VM contention. (Work in progress.)
+- **[GPU passthrough via VFIO]({{< ref "vfio-gpu-passthrough-proxmox" >}})** — what's under the `passthrough` mentioned here: IOMMU groups, vfio-pci, VM-to-VM contention.
 - **LiteLLM as a gateway** — minimal YAML config, virtual keys, aliases, Redis cache integration.
 - **Open WebUI wired to LiteLLM** — closing the loop for a ChatGPT-like UI that's 100% local.
 
