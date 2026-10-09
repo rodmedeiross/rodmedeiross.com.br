@@ -166,7 +166,7 @@ For inbound email, **Cloudflare Email Routing** with SPF/DKIM/DMARC configured. 
 This was the **ground floor**. Everything running in this homelab assumes these decisions. In the [next post]({{< ref "honcho-self-hosted-gotchas" >}}) I show one of the concrete pieces living on top of this floor: the **self-hosted semantic memory** I wired into my agents (and which, in practice, is what got me writing this blog).
 
 And later in the series, a few topics only mentioned here:
-- **GPU passthrough via VFIO** — what's under the `passthrough` I mentioned in Decision 4. (Work in progress.)
+- **[GPU passthrough via VFIO]({{< ref "vfio-gpu-passthrough-proxmox" >}})** — what's under the `passthrough` I mentioned in Decision 4.
 - **k3s on the isolated lab VLAN** for the application layer.
 - **The *arr stack on willy** with media coming from TrueNAS.
 - **Self-hosted GitLab on encaged** behind Cloudflare Tunnel.

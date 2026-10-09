@@ -166,7 +166,7 @@ Pra entrada de email, **Cloudflare Email Routing** com SPF/DKIM/DMARC configurad
 Esse foi o **chão**. Tudo que rodar nesse homelab assume essas decisões. No [próximo post]({{< ref "honcho-self-hosted-gotchas" >}}) eu mostro uma das peças concretas que vivem em cima desse chão: a **memória semântica self-hosted** que liguei aos meus agents (e que foi, na prática, o que me trouxe pra escrever esse blog).
 
 E mais pra frente da série, alguns assuntos que ficaram só citados aqui:
-- **GPU passthrough via VFIO**: o que tem por baixo do `passthrough` que mencionei na Decisão 4. (Em construção.)
+- **[GPU passthrough via VFIO]({{< ref "vfio-gpu-passthrough-proxmox" >}})**: o que tem por baixo do `passthrough` que mencionei na Decisão 4.
 - **k3s na VLAN isolada de labs** pra camada de aplicação.
 - **arr stack no willy** com media vinda do TrueNAS.
 - **GitLab self-hosted no encaged** atrás do Cloudflare Tunnel.

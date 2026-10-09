@@ -74,3 +74,111 @@
   width: auto;
   min-width: min(90vw, 1200px);
 }
+
+/* ---- Header brawl: mascot vs gopher (layouts/_partials/header-brawl.html) ---- */
+.hb-scene {
+  display: inline-block;
+  margin-left: 0.35rem;
+  overflow: visible;
+  vertical-align: middle;
+  color: currentColor;
+  --hb-cycle: 9s;
+}
+.hb-scene text {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  fill: currentColor;
+  user-select: none;
+}
+.hb-scene g, .hb-scene text, .hb-scene path { transform-box: fill-box; transform-origin: center; }
+
+/* gopher palette */
+.hb-go-body  { fill: #8fe0ef; stroke: #1f2a30; stroke-width: 0.8; }
+.hb-go-eye   { fill: #fff;    stroke: #1f2a30; stroke-width: 0.6; }
+.hb-go-pupil { fill: #1f2a30; }
+.hb-go-nose  { fill: #6b4a2b; }
+.hb-go-tooth { fill: #fff;    stroke: #1f2a30; stroke-width: 0.4; }
+.hb-go-paw   { fill: #c9a27e; stroke: #1f2a30; stroke-width: 0.6; }
+.dark .hb-go-body { stroke: #0b1115; }
+
+/* cloud palette: follows the text color so it works on both themes */
+.hb-puff { fill: currentColor; fill-opacity: 0.16; stroke: currentColor; stroke-opacity: 0.55; stroke-width: 0.7; }
+.hb-sym  { font-size: 6.5px; opacity: 0; }
+.hb-star { fill: #f5b301; stroke: #1f2a30; stroke-width: 0.4; opacity: 0; }
+.hb-bang, .hb-dizzy { font-size: 8px; opacity: 0; }
+.hb-bang  { fill: #d63b2f; }
+.hb-dizzy { fill: #f5b301; }
+
+/* --- timeline (percent of --hb-cycle)
+   0-14   idle
+   14-30  back off, "!" over both heads
+   30-40  charge to the center
+   40-74  fight cloud (fighters hidden inside)
+   74-84  back to corners, dizzy
+   84-100 idle                                                          --- */
+.hb-gopher { animation: hb-gopher var(--hb-cycle) ease-in-out infinite; }
+.hb-mascot { animation: hb-mascot var(--hb-cycle) ease-in-out infinite; }
+@keyframes hb-gopher {
+  0%, 14%   { transform: translateX(0);     opacity: 1; }
+  22%       { transform: translateX(-8px); }
+  30%       { transform: translateX(-9px); opacity: 1; }
+  38%       { transform: translateX(32px); opacity: 1; }
+  41%, 73%  { transform: translateX(32px); opacity: 0; }
+  74%       { transform: translateX(-4px); opacity: 0; }
+  78%       { transform: translateX(-4px); opacity: 1; }
+  84%, 100% { transform: translateX(0);     opacity: 1; }
+}
+@keyframes hb-mascot {
+  0%, 14%   { transform: translateX(0);      opacity: 1; }
+  22%       { transform: translateX(8px); }
+  30%       { transform: translateX(9px);   opacity: 1; }
+  38%       { transform: translateX(-32px); opacity: 1; }
+  41%, 73%  { transform: translateX(-32px); opacity: 0; }
+  74%       { transform: translateX(4px);   opacity: 0; }
+  78%       { transform: translateX(4px);   opacity: 1; }
+  84%, 100% { transform: translateX(0);      opacity: 1; }
+}
+
+/* idle bob + the stand-off tremble */
+.hb-bob { animation: hb-bob 1.1s ease-in-out infinite alternate; }
+.hb-bob-alt { animation-delay: -0.55s; }
+@keyframes hb-bob { from { transform: translateY(0); } to { transform: translateY(-1.2px); } }
+
+.hb-bang  { animation: hb-bang  var(--hb-cycle) steps(1, end) infinite; }
+.hb-dizzy { animation: hb-dizzy var(--hb-cycle) linear infinite; }
+@keyframes hb-bang  { 0%, 16% { opacity: 0; } 17%, 31% { opacity: 1; } 32%, 100% { opacity: 0; } }
+@keyframes hb-dizzy {
+  0%, 76%  { opacity: 0; transform: rotate(0deg); }
+  78%      { opacity: 1; }
+  88%      { opacity: 1; transform: rotate(540deg); }
+  92%, 100% { opacity: 0; transform: rotate(720deg); }
+}
+
+/* the cloud: pops in when they collide, wobbles, pops out */
+.hb-cloud { animation: hb-cloud var(--hb-cycle) ease-in-out infinite; transform: scale(0); opacity: 0; }
+@keyframes hb-cloud {
+  0%, 39%   { transform: scale(0);   opacity: 0; }
+  42%       { transform: scale(1.1); opacity: 1; }
+  44%, 72%  { transform: scale(1);   opacity: 1; }
+  75%, 100% { transform: scale(0);   opacity: 0; }
+}
+.hb-puffs { animation: hb-wobble 0.22s ease-in-out infinite alternate; }
+@keyframes hb-wobble { from { transform: rotate(-5deg) scale(0.97); } to { transform: rotate(5deg) scale(1.03); } }
+
+/* symbols and stars pop in sequence while the cloud is up */
+.hb-sym  { animation: hb-pop 2.1s ease-out infinite; animation-delay: var(--d, 0s); }
+.hb-star { animation: hb-pop 1.8s ease-out infinite; animation-delay: var(--d, 0s); }
+@keyframes hb-pop {
+  0%   { opacity: 0; transform: translateY(2px) scale(0.6); }
+  12%  { opacity: 1; transform: translateY(-1px) scale(1.15); }
+  38%  { opacity: 1; transform: translateY(-3px) scale(1); }
+  55%, 100% { opacity: 0; transform: translateY(-6px) scale(0.8); }
+}
+
+@media (max-width: 400px) { .hb-scene { display: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .hb-scene *, .hb-scene { animation: none !important; }
+  .hb-cloud, .hb-bang, .hb-dizzy { display: none; }
+}

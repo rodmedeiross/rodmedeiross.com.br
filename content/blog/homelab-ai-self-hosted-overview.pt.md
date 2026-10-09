@@ -27,7 +27,7 @@ E o quarto, honesto: é divertido construir as coisas.
 
 ## Onde mora: `mobydick`, cluster parrudo só pra Docker
 
-A inferência precisa de GPU. Tenho uma GPU NVIDIA de linha consumer, não é a placa do mundo, mas roda modelo o bastante pra segurar minhas cargas de trabalho. Ela é passada via **PCIe passthrough (VFIO)** do Proxmox direto pra uma VM dedicada: `mobydick`. Essa VM é só Docker host, nada de UI, nada de servidor de mídia compartilhando GPU. Só o stack de IA. O fluxo de configurar VFIO direito pra isso fica em post próprio nessa série (ainda em construção, é assunto pra um texto inteiro).
+A inferência precisa de GPU. Tenho uma GPU NVIDIA de linha consumer, não é a placa do mundo, mas roda modelo o bastante pra segurar minhas cargas de trabalho. Ela é passada via **PCIe passthrough (VFIO)** do Proxmox direto pra uma VM dedicada: `mobydick`. Essa VM é só Docker host, nada de UI, nada de servidor de mídia compartilhando GPU. Só o stack de IA. O fluxo de configurar VFIO direito pra isso fica em [post próprio nessa série]({{< ref "vfio-gpu-passthrough-proxmox" >}}), é assunto pra um texto inteiro.
 
 A escolha de isolar AI numa VM exclusiva foi proposital:
 
@@ -113,7 +113,7 @@ Eu podia conectar Honcho direto no Ollama. Funciona. Mas o LiteLLM resolve quatr
 
 Esse foi o **mapa**. Os próximos posts mergulham em peças concretas dele:
 
-- **GPU passthrough via VFIO**: o que tem por baixo do `passthrough` mencionado aqui: IOMMU groups, vfio-pci, conflito entre VMs. (Em construção.)
+- **[GPU passthrough via VFIO]({{< ref "vfio-gpu-passthrough-proxmox" >}})**: o que tem por baixo do `passthrough` mencionado aqui: IOMMU groups, vfio-pci, conflito entre VMs.
 - **LiteLLM como gateway**: config mínima em YAML, virtual keys, aliases, integração com Redis cache.
 - **Open WebUI ligado no LiteLLM**: fechando o loop pra ter ChatGPT-like UI 100% local.
 
