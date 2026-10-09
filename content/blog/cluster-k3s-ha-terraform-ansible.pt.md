@@ -245,8 +245,8 @@ Pra fixar, os cinco espaços de endereço que convivem no cluster:
 | IPs dos nós | na `vlan-lab` | as 3 VMs |
 | VIP | na `vlan-lab` | control-plane (kube-vip) |
 | Pool do MetalLB | na `vlan-lab` | Services `LoadBalancer` |
-| Pod CIDR (`10.42.0.0/16`, default do k3s) | só interno | pods, via flannel (VXLAN) |
-| Service CIDR (`10.43.0.0/16`, default do k3s) | só interno | Services `ClusterIP` |
+| Pod CIDR (o default do k3s) | só interno | pods, via flannel (VXLAN) |
+| Service CIDR (o default do k3s) | só interno | Services `ClusterIP` |
 
 Os três primeiros são reais na rede. Os dois últimos são virtuais, só existem dentro do cluster.
 
