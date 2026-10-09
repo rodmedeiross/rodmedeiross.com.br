@@ -1,0 +1,73 @@
+{{- /* Header easter egg: the mascot and a gopher square off, charge, vanish into
+       a cartoon fight cloud full of code symbols, then stagger back to their
+       corners. Pure SVG + CSS keyframes (no JS); honors prefers-reduced-motion. */ -}}
+<svg class="hb-scene" viewBox="0 0 120 40" width="108" height="36" aria-hidden="true" focusable="false">
+  <!-- gopher, left corner, faces right -->
+  <g transform="translate(22 24)">
+    <g class="hb-gopher">
+      <g class="hb-bob">
+        <text class="hb-bang" x="0" y="-19">!</text>
+        <text class="hb-dizzy" x="0" y="-19">@</text>
+        <!-- ears -->
+        <circle cx="-6" cy="-10" r="2.6" class="hb-go-body"/>
+        <circle cx="6" cy="-10" r="2.6" class="hb-go-body"/>
+        <!-- body -->
+        <ellipse cx="0" cy="0" rx="8.5" ry="11" class="hb-go-body"/>
+        <!-- eyes -->
+        <circle cx="-2.5" cy="-4" r="3" class="hb-go-eye"/>
+        <circle cx="4" cy="-4" r="3" class="hb-go-eye"/>
+        <circle cx="-1.6" cy="-3.6" r="1.1" class="hb-go-pupil"/>
+        <circle cx="4.9" cy="-3.6" r="1.1" class="hb-go-pupil"/>
+        <!-- nose + teeth -->
+        <ellipse cx="1.5" cy="0.5" rx="1.6" ry="1.1" class="hb-go-nose"/>
+        <rect x="0.2" y="1.6" width="1.3" height="2.2" class="hb-go-tooth"/>
+        <rect x="1.7" y="1.6" width="1.3" height="2.2" class="hb-go-tooth"/>
+        <!-- arms + feet -->
+        <ellipse cx="-7.5" cy="3" rx="1.6" ry="2.6" class="hb-go-paw"/>
+        <ellipse cx="7.5" cy="3" rx="1.6" ry="2.6" class="hb-go-paw"/>
+        <ellipse cx="-4" cy="10.5" rx="2.6" ry="1.4" class="hb-go-paw"/>
+        <ellipse cx="4" cy="10.5" rx="2.6" ry="1.4" class="hb-go-paw"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- mascot, right corner, faces left -->
+  <g transform="translate(97 23)">
+    <g class="hb-mascot">
+      <g class="hb-bob hb-bob-alt">
+        <text class="hb-bang" x="0" y="-19">!</text>
+        <text class="hb-dizzy" x="0" y="-19">@</text>
+        <image href="/images/mascot.png" x="-14" y="-14" width="28" height="28"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- fight cloud, center -->
+  <g transform="translate(60 22)">
+    <g class="hb-cloud">
+      <g class="hb-puffs">
+        <circle cx="-13" cy="2" r="7" class="hb-puff"/>
+        <circle cx="-5" cy="-6" r="7.5" class="hb-puff"/>
+        <circle cx="5" cy="-7" r="7" class="hb-puff"/>
+        <circle cx="13" cy="1" r="7" class="hb-puff"/>
+        <circle cx="6" cy="7" r="7" class="hb-puff"/>
+        <circle cx="-5" cy="7" r="7.5" class="hb-puff"/>
+        <circle cx="0" cy="0" r="9" class="hb-puff"/>
+      </g>
+      <g class="hb-syms">
+        <text class="hb-sym" style="--d:0s"   x="-10" y="-5">{}</text>
+        <text class="hb-sym" style="--d:.35s" x="6"   y="-7">λ</text>
+        <text class="hb-sym" style="--d:.7s"  x="-12" y="9">#!</text>
+        <text class="hb-sym" style="--d:1.05s" x="4"  y="9">;</text>
+        <text class="hb-sym" style="--d:1.4s" x="-3"  y="2">&lt;/&gt;</text>
+        <text class="hb-sym" style="--d:1.75s" x="9"  y="2">*</text>
+      </g>
+      <g class="hb-stars">
+        <path class="hb-star" style="--d:.2s"  transform="translate(-18 -9)" d="M0-3L.9-.9 3 0 .9.9 0 3-.9.9-3 0-.9-.9Z"/>
+        <path class="hb-star" style="--d:.9s"  transform="translate(19 -8)"  d="M0-3L.9-.9 3 0 .9.9 0 3-.9.9-3 0-.9-.9Z"/>
+        <path class="hb-star" style="--d:1.5s" transform="translate(16 11)"  d="M0-3L.9-.9 3 0 .9.9 0 3-.9.9-3 0-.9-.9Z"/>
+        <path class="hb-star" style="--d:.6s"  transform="translate(-17 10)" d="M0-3L.9-.9 3 0 .9.9 0 3-.9.9-3 0-.9-.9Z"/>
+      </g>
+    </g>
+  </g>
+</svg>
